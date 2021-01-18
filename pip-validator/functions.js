@@ -11,11 +11,18 @@ let workingPYS = []
 // if we don't call the functions from this block they will be imported to the test module and use the nested local functions and not as a global function
 // that we can stub
 const functions = {
+    filterPKG,
     validatePYs,
     testinstallPY,
     validation
 }
 module.exports = functions;
+
+
+function filterPKG(arr) {
+    return arr.filter(s=>~s.indexOf(".whl"));
+}
+
 
 async function validation(pydir) {
     do {
