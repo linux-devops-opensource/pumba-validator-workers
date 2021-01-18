@@ -11,17 +11,11 @@ let workingRPMS = []
 // if we don't call the functions from this block they will be imported to the test module and use the nested local functions and not as a global function
 // that we can stub
 const functions = {
-    getRPMs,
     validateRPMs,
     testinstallRPM,
     validation
 }
 module.exports = functions;
-
-async function getRPMs(dlUrl) {
-    const getindex = await genfunc.getPackages(dlUrl)
-    return getindex.match(/.*\.rpm/g)
-}
 
 async function validation(rpmdir) {
     do {
@@ -36,6 +30,7 @@ async function validation(rpmdir) {
     } while (loopbacktoken)
     superDebug(workingRPMS)
     console.log('RPM package validator has finished')
+    return workingRPMS
 }
 
 function validateRPMs(rpmdir) {
@@ -45,14 +40,14 @@ function validateRPMs(rpmdir) {
                 let stdout = execSync(`file ${rpmdir}/${file}`).toString()
                 if (stdout.includes("RPM")) {
                     try {
-                        await testinstallRPM(`${rpmdir}/${file}`)
-                        workingRPMS.push(file)
+                        await testinstallRPM(rpmdir, file)
                     } catch (err) {
                         rej(err)
                     }
                     res(true)
                 } else {
                     const err = `File "${file}" is not an RPM package`
+                    fs.unlinkSync(`${rpmdir}/${file}`)
                     errDebug(err)
                     rej(err)
                 }
@@ -63,24 +58,27 @@ function validateRPMs(rpmdir) {
     })
 }
 
-function testinstallRPM(rpm) {
+function testinstallRPM(dir, rpm) {
     return new Promise((res, rej) => {
         console.log(`Validating Package ${rpm}`)
         superDebug(`Stage testinstallRPM:start loopbacktoken: ${loopbacktoken}`)
         try {
-            const stdout = execSync(`yum -y install ${rpm} --setopt=tsflags=test --setopt=keepcache=0`, {stdio: [stderr]}).toString()
+            const stdout = execSync(`yum -y install ${dir}/${rpm} --setopt=tsflags=test --setopt=keepcache=0`, {stdio: [stderr]}).toString()
             superDebug(stdout)
             console.log(`Package ${rpm} installed successfully`)
             loopbacktoken = true
-            genfunc.deletePackagefile(rpm)
+            genfunc.deletePackagefile(`${dir}/${rpm}`)
+            workingRPMS.push({ name: rpm, statusCode: 0, msg: "success" })
             res(true)
         } catch (err) {
             const stderr = err.stderr
             if (stderr.includes("Requires") || stderr.includes("nothing provides")) {
                 console.log(`Package ${rpm} has missing dependencies...`)
+                workingRPMS.push({ name: rpm, statusCode: 1, msg: "missing_deps" })
                 errDebug(err)
             } else {
                 console.log(`Unable to install package ${rpm}, run debug mode to view error`)
+                workingRPMS.push({ name: rpm, statusCode: 666, msg: 'unknown_err' } )
                 errDebug(err)
             }
             rej(err)

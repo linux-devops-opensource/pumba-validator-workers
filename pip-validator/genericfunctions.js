@@ -1,11 +1,13 @@
 const axios = require('axios')
 const fs = require('fs')
 const errDebug = require('debug')('debug:err')
+const superDebug = require('debug')('debug:stdout')
 
 const functions = {
     getPackages,
     downloadPackages,
-    deletePackagefile
+    deletePackagefile,
+    sendDataToPKGVal
 }
 module.exports = functions;
 
@@ -14,13 +16,15 @@ async function getPackages(dlUrl) {
         url: dlUrl,
         method: 'GET'
     })
+    superDebug(res.data)
     return res.data
 }
 
 async function downloadPackages(packagelist, dlUrl, targetDir) {
     const amount = packagelist.length
     for ( let i = 0; i < amount; i++) {
-        const packageName = packagelist[i].split("\"")[1]
+        const packageName = packagelist[i]
+        console.log(packageName)
         await downloadPackage(`${dlUrl}${packageName}`, `${targetDir}/${packageName}`)
     }
 }
@@ -59,9 +63,31 @@ function deletePackagefile(pkg) {
           console.log(`Deleted package file ${pkg} succesfully`)
           res(true)
       } catch (err) {
-          console.log(`Error deleting file ${pkg} run debug to see error`)
+          console.log(`Error deleting file ${pkg} run debug to view error`)
           errDebug(err)
           rej(err)
       }
   })
+}
+
+function sendDataToPKGVal(pkgarray, ValURL, SessionID) {
+    superDebug(JSON.stringify(pkgarray))
+    data = JSON.stringify({"sid":SessionID,"statusCode":0,"pkgs":pkgarray});
+    post = {
+        url: ValURL,
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data: data
+    };
+    axios(post)
+    .then(function (res) {
+        console.log('Sent package array to Package Validator')
+        superDebug(res)
+    })
+    .catch(function (err) {
+        console.log(`Error sending package array to Package validator, run debug to view error`)
+        errDebug(err)
+    })
 }
