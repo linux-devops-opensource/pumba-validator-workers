@@ -1,7 +1,0 @@
-.dockerignore
-.gitignore
-rpms4test
-node_modules
-test
-tekton
-README.md
