@@ -13,7 +13,7 @@ describe('Test install RPM', function() {
         this.timeout(7000)
         fs.copyFileSync(`./test/testresources/${testRPM}`, `./test/testsandbox/${testRPM}`)
         sinon.stub(genfunc, "deletePackagefile").returns(true)
-        const result = await functions.testinstallRPM(`./test/testsandbox/${testRPM}`)
+        const result = await functions.testinstallRPM('./test/testsandbox/', testRPM)
         chai.expect(result).to.be.true
     })
 })
