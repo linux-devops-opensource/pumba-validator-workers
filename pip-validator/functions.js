@@ -38,7 +38,7 @@ function validatePYs(pydir) {
         if (fs.readdirSync(pydir).length != 0) {
             fs.readdirSync(pydir).forEach(async (file) => {
                 let stdout = execSync(`file ${pydir}/${file}`).toString()
-                if (stdout.includes("PY")) {
+                if (stdout.includes("whl")) {
                     try {
                         await testinstallPY(pydir, file)
                     } catch (err) {
@@ -63,7 +63,7 @@ function testinstallPY(dir, py) {
         console.log(`Validating Package ${py}`)
         superDebug(`Stage testinstallPY:start loopbacktoken: ${loopbacktoken}`)
         try {
-            const stdout = execSync(`yum -y install ${dir}/${py} --setopt=tsflags=test --setopt=keepcache=0`, {stdio: [stderr]}).toString()
+            const stdout = execSync(`pip install ${dir}/${py}`, {stdio: [stderr]}).toString()
             superDebug(stdout)
             console.log(`Package ${py} installed successfully`)
             loopbacktoken = true
