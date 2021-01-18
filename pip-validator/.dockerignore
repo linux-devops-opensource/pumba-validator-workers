@@ -1,6 +1,6 @@
 .dockerignore
 .gitignore
-rpms4test
+pys4test
 node_modules
 test
 tekton

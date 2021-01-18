@@ -1,9 +1,9 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: pval-rpmval-image
+  name: pval-pyval-image
 spec:
   type: image
   params:
   - name: url
-    value: docker.io/shirmon/pumba:pval-rpmval
+    value: docker.io/shirmon/pumba:pval-pyval

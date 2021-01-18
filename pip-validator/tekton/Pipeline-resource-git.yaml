@@ -1,11 +1,11 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: pval-rpmval-git-branch
+  name: pval-pyval-git-branch
 spec:
   type: git
   params:
     - name: revision
-      value: PVal-rpmval
+      value: PVal-pyval
     - name: url
       value: https://github.com/linux-devops-opensource/pumba.git

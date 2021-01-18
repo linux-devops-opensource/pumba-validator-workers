@@ -1,7 +1,7 @@
 const fs = require('fs')
 const chai = require('chai')
 const sinon = require('sinon')
-const testPackage = 'telepathy-filesystem-0.0.2-6.el7.noarch.rpm'
+const testPackage = 'telepathy-filesystem-0.0.2-6.el7.noarch.py'
 const genfunc = require('../genericfunctions')
 
 //create sandbox

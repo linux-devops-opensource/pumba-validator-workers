@@ -1,4 +1,4 @@
-The following public key can be used to verify RPM packages built and
+The following public key can be used to verify PY packages built and
 signed by Red Hat, Inc.  This key is used for packages in Red Hat
 products shipped after November 2009, and for all updates to those
 products.
@@ -36,7 +36,7 @@ OFktl15jZJaMxuQBqYdBgSay2G0U6D1+7VsWufpzd/Abx1/c3oi9ZaJvW22kAggq
 dzdA27UUYjWvx42w9menJwh/0jeQcTecIUd0d0rFcw/c1pvgMMl/Q73yzKgKYw==
 =zbHE
 -----END PGP PUBLIC KEY BLOCK-----
-The following public key can be used to verify RPM packages built and
+The following public key can be used to verify PY packages built and
 signed by Red Hat, Inc.  This key is a supporting (auxiliary) key for
 Red Hat products shipped after November 2006 and for all updates to
 those products.
