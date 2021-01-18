@@ -16,13 +16,15 @@ async function getPackages(dlUrl) {
         url: dlUrl,
         method: 'GET'
     })
+    superDebug(res.data)
     return res.data
 }
 
 async function downloadPackages(packagelist, dlUrl, targetDir) {
     const amount = packagelist.length
     for ( let i = 0; i < amount; i++) {
-        const packageName = packagelist[i].split("\"")[1]
+        const packageName = packagelist[i]
+        console.log(packageName)
         await downloadPackage(`${dlUrl}${packageName}`, `${targetDir}/${packageName}`)
     }
 }

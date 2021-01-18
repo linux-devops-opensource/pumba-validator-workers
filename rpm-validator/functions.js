@@ -18,11 +18,6 @@ const functions = {
 }
 module.exports = functions;
 
-async function getRPMs(dlUrl) {
-    const getindex = await genfunc.getPackages(dlUrl)
-    return getindex.match(/.*\.rpm/g)
-}
-
 async function validation(rpmdir) {
     do {
         loopbacktoken = false
@@ -53,6 +48,7 @@ function validateRPMs(rpmdir) {
                     res(true)
                 } else {
                     const err = `File "${file}" is not an RPM package`
+                    fs.unlinkSync(`${rpmdir}/${file}`)
                     errDebug(err)
                     rej(err)
                 }
