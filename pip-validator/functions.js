@@ -19,8 +19,9 @@ const functions = {
 module.exports = functions;
 
 
-function filterPKG(arr) {
-    return arr.filter(s=>~s.indexOf(".whl"));
+async function filterPKG(StorageManagerURL) {
+    const pys = await genfunc.getPackages(StorageManagerURL)
+    return pys.filter(s=>~s.indexOf(".whl"));
 }
 
 

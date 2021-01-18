@@ -92,6 +92,6 @@ function sendDataToPKGVal(pkgarray, ValURL, SessionID) {
              errDebug(err)
          })
     } else{
-
+        console.log(`no packages to validate`) 
     }
 }

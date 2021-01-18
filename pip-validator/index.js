@@ -6,7 +6,7 @@ const PKGValidatorURL = 'http://20.76.10.244:3000/sessions'
 const targetDir = './pys4test'
 
 async function Start() {
-    const pys = await genfunc.getPackages(StorageManagerURL)
+    const pys = await func.filterPKG(StorageManagerURL)
     await genfunc.downloadPackages(pys, StorageManagerURL, targetDir)
     const workingPkgs = await func.validation(targetDir)
     genfunc.sendDataToPKGVal(workingPkgs, PKGValidatorURL, SessionID)
