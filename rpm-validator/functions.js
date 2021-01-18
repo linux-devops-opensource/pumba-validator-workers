@@ -11,7 +11,6 @@ let workingRPMS = []
 // if we don't call the functions from this block they will be imported to the test module and use the nested local functions and not as a global function
 // that we can stub
 const functions = {
-    getRPMs,
     validateRPMs,
     testinstallRPM,
     validation
@@ -75,11 +74,11 @@ function testinstallRPM(dir, rpm) {
             const stderr = err.stderr
             if (stderr.includes("Requires") || stderr.includes("nothing provides")) {
                 console.log(`Package ${rpm} has missing dependencies...`)
-                workingRPMS.push( { rpm, state: 'missing_deps' } )
+                workingRPMS.push({ name: rpm, statusCode: 1, msg: "missing_deps" })
                 errDebug(err)
             } else {
                 console.log(`Unable to install package ${rpm}, run debug mode to view error`)
-                workingRPMS.push( { rpm, state: 'unknown_err' } )
+                workingRPMS.push({ name: rpm, statusCode: 666, msg: 'unknown_err' } )
                 errDebug(err)
             }
             rej(err)
